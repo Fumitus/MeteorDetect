@@ -1,45 +1,12 @@
-#!/usr/bin/env python3 """ Meteor Detector for Night Videos (e.g., Garmin dashcam)
+#!/usr/bin/env python3
 
-"""Approach
-
-1. Stabilize brightness with gamma + denoise.
-
-
-2. Maintain a running-average background to highlight sudden bright streaks.
-
-
-3. Threshold positive (brightening) residuals.
-
-
-4. Validate with edge + probabilistic Hough transform (linear, thin, long).
-
-
-5. Lightweight multi-frame confirmation (2–4 frames) to reduce false positives.
-
-
-6. Save event frames and an optional video clip around each detection.
-
-
-
-Usage
-
-python meteor_detector.py --video input.mp4 --out out_dir --min-length 40 --min-aspect 6 --confirm-frames 2 --save-clips
-
-Dependencies
-
-opencv-python
-
-numpy
-
-
-Notes
-
-Works best on night sky footage; for moving cameras, results vary. If your camera moves a lot, consider enabling --stabilize to compensate small ego-motion.
-
-Tune thresholds for your footage (exposure, resolution, FPS). """
-
-
-import os import cv2 import math import time import argparse import numpy as np from collections import deque, defaultdict
+import os 
+import cv2 
+import math 
+import time 
+import argparse 
+import numpy as np 
+from collections import deque, defaultdict
 
 def ensure_dir(p: str): os.makedirs(p, exist_ok=True)
 
